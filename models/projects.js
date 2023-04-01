@@ -2,9 +2,13 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const projectSchema = new Schema({
-    name: {
+    title: {
         type: String,
-        required:true
+        required: true,
+        unique:true
+    },
+    content: {
+        type:String
     },
     users: [{
         type: Schema.Types.ObjectId,

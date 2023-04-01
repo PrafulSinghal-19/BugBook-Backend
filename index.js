@@ -6,6 +6,8 @@ require('dotenv').config();
 const app = express();
 const mongoose = require("mongoose");
 const auth = require("./controllers/auth.js");
+const user = require("./controllers/user.js");
+const project = require("./controllers/project");
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,5 +26,15 @@ app.use(cors({
 }));
 
 app.post("/fetchData", auth.github_oauth);
+app.post("/user", auth.signup);
+app.post("/searchData", user.searchData);
+app.patch("/user/addProject/:id", user.addProject);
+app.patch("/user/deleteProject/:id", user.deleteProject);
+
+app.get("/projects", project.getData);
+app.post("/projects", project.saveData);
+app.get("/projects/:id", project.getDataById);
+app.patch("/projects/addUser/:id", project.addUser);
+app.patch("/projects/deleteUser/:id", project.deleteUser);
 
 app.listen(8000, () => console.log("The server is up and running"));

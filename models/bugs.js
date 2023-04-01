@@ -4,7 +4,6 @@ const Schema = mongoose.Schema;
 const bugSchema = new Schema({
     title: {
         type: String,
-        required:true
     },
     content: {
         type: String,
@@ -15,7 +14,6 @@ const bugSchema = new Schema({
     }],
     author: {
         type: String,
-        required:true
     }
 })
 
@@ -24,6 +22,6 @@ const autoPopulateComments = function (next) {
     next();
 }
 
-userSchema.pre('findOne', autoPopulateComments);
+bugSchema.pre('findOne', autoPopulateComments);
 
 module.exports = mongoose.model('Bug', bugSchema);
