@@ -5,12 +5,25 @@ const cors = require("cors");
 require('dotenv').config();
 const app = express();
 const mongoose = require("mongoose");
-const auth = require("./controllers/auth.js");
-const user = require("./controllers/user.js");
-const project = require("./controllers/project");
+const user = require("./routes/user");
+const project = require("./routes/project");
+const admin = require("./routes/admin");
+const auth = require("./routes/auth");
+const passportSetup = require("./config/passport-setup");
+const cookieSession = require("cookie-session");
+const passport = require("passport");
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(cookieSession({
+    name: "session",
+    maxAge: 24 * 60 * 60 * 1000,
+    keys: [process.env.COOKIE_KEY]
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 mongoose.connect('mongodb://127.0.0.1:27017/bugtracker', {
     useNewUrlParser: true,
@@ -22,19 +35,13 @@ db.on("error", console.error.bind(console, "connection error"))
 db.once("open", () => console.log("Database Connected")); 
 
 app.use(cors({
+    credentials: true,
     origin: 'http://localhost:3000'
 }));
 
-app.post("/fetchData", auth.github_oauth);
-app.post("/user", auth.signup);
-app.post("/searchData", user.searchData);
-app.patch("/user/addProject/:id", user.addProject);
-app.patch("/user/deleteProject/:id", user.deleteProject);
-
-app.get("/projects", project.getData);
-app.post("/projects", project.saveData);
-app.get("/projects/:id", project.getDataById);
-app.patch("/projects/addUser/:id", project.addUser);
-app.patch("/projects/deleteUser/:id", project.deleteUser);
+app.use("/user",user);
+app.use("/admin",admin);
+app.use("/project", project);
+app.use("/auth", auth);
 
 app.listen(8000, () => console.log("The server is up and running"));

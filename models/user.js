@@ -12,7 +12,7 @@ const userSchema = new Schema({
     },
     password: {
         type: String,
-        required:true
+        // required:true
     },
     projects: [{
         type: Schema.Types.ObjectId,
