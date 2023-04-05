@@ -20,11 +20,4 @@ const projectSchema = new Schema({
     }]
 });
 
-const autoPopulateBugsUsers = function (next){
-    this.populate('users').populate('bugs');
-    next();
-}
-
-projectSchema.pre('findOne', autoPopulateBugsUsers);
-
 module.exports = mongoose.model('Project', projectSchema);

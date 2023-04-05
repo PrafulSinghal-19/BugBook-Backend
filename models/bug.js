@@ -14,14 +14,12 @@ const bugSchema = new Schema({
     }],
     author: {
         type: String,
+    },
+    project: {
+        type: Schema.Types.ObjectId,
+        ref:'Project'
     }
 })
 
-const autoPopulateComments = function (next) {
-    this.populate('comments'); //This should be same as the name given in schema 
-    next();
-}
-
-bugSchema.pre('findOne', autoPopulateComments);
 
 module.exports = mongoose.model('Bug', bugSchema);

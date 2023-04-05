@@ -12,6 +12,7 @@ const auth = require("./routes/auth");
 const passportSetup = require("./config/passport-setup");
 const cookieSession = require("cookie-session");
 const passport = require("passport");
+var cookieParser=require('cookie-parser');
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,6 +25,7 @@ app.use(cookieSession({
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(cookieParser());
 
 mongoose.connect('mongodb://127.0.0.1:27017/bugtracker', {
     useNewUrlParser: true,

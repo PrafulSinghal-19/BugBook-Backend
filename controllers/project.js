@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const { ObjectId } = require('mongodb');
 const Project = require("../models/project");
 const User = require("../models/user");
+const Bug = require("../models/bug");
 
 module.exports.getProjects = (req, res) => {
     Project.find({}).then((val, err) => {
@@ -66,6 +67,34 @@ module.exports.deleteUser = (req, res, next) => {
         });
     });
     
+    return res;
+}
+
+module.exports.getBugs = (req, res, next) => {
+    const id = req.params.projectId;
+    Project.findById(id).populate("bugs").then((val) => {
+        res.status(200).json(val);
+    }).catch((e) => res.status(400).json(e));
+
+    return res;
+}
+
+module.exports.addBug = async(req, res) => {
+    const id = req.params.projectId;
+
+    const { title, content } = req.body;
+
+    const newBug = new Bug({
+        title: title,
+        content: content,
+        author: req.user.name,
+        project: id
+    });
+
+    newBug.save().then((bug) => {
+        Project.updateOne({ _id: id }, { $push: { bugs: bug._id } }).then((val) => {res.status(200).json(val)}).catch((e) => res.status(400).json(PromiseRejectionEvent));
+    }).catch((e) => res.status(400).json(e));
+
     return res;
 }
 

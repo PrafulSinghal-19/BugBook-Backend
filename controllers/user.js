@@ -6,7 +6,6 @@ const mongoose = require("mongoose");
 
 module.exports.search = (req, res, next) => {
   const name = req.body.search;
-  console.log(`/${name}/i`);
   User.find({ name: { $regex: `^${name}`, $options: "i" } }).then(
     (val, err) => {
       res.json(val);
@@ -38,4 +37,14 @@ module.exports.deleteProject = (req, res, next) => {
   });
   return res;
 };
+
+module.exports.getUser = (req, res) => {
+  const id = req.user._id;
+
+  User.findById(id).populate('projects').then((user) => {
+    res.status(200).json(user);
+  }).catch((e) => res.status(400).json(e));
+
+  return res;
+}
 
