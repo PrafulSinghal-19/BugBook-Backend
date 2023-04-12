@@ -12,6 +12,11 @@ route.get("/login/success", (req, res) => {
       user: req.user,
     });
   }
+
+  else {
+    res.status(400).json(new Error("No User Found"))
+  }
+
   return res;
 });
 

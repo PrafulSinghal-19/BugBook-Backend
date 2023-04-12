@@ -39,6 +39,13 @@ module.exports.deleteProject = (req, res, next) => {
 };
 
 module.exports.getUser = (req, res) => {
+
+  if (!req.user) {
+    res.status(400).json(new Error("No User Found"));
+
+    return res;
+  }
+
   const id = req.user._id;
 
   User.findById(id).populate('projects').then((user) => {

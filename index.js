@@ -9,6 +9,7 @@ const user = require("./routes/user");
 const project = require("./routes/project");
 const admin = require("./routes/admin");
 const auth = require("./routes/auth");
+const message = require("./routes/messages");
 const passportSetup = require("./config/passport-setup");
 const cookieSession = require("cookie-session");
 const passport = require("passport");
@@ -45,5 +46,6 @@ app.use("/user",user);
 app.use("/admin",admin);
 app.use("/project", project);
 app.use("/auth", auth);
+app.use("/message", message);
 
 app.listen(8000, () => console.log("The server is up and running"));

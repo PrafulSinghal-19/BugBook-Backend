@@ -76,9 +76,7 @@ passport.use(
 passport.use(
   "signIn",
   new LocalStratergy(async (username, password, done) => {
-    console.log(username);
     User.find({ email: username }).then((val) => {
-      console.log(val);
       done(null, val[0])
     });
   })
